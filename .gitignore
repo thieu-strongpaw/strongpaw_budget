@@ -10,3 +10,8 @@ env/
 *.xls
 *.xlsx
 *.json
+
+# Django database and migrations
+db.sqlite3
+*/migrations/*.py
+!*/migrations/__init__.py
