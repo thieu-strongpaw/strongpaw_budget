@@ -1,0 +1,12 @@
+__pycache__/
+
+venv/
+env/
+
+*.tmp
+*.log
+
+*.csv
+*.xls
+*.xlsx
+*.json
