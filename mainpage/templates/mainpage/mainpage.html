@@ -1,4 +1,21 @@
-<!doctype html5>
+{% extends "base.html" %}
+
+{% block page_content %}
 
 <h1>Welcome to the Strongpaw Budget</h1>
-<p>Mange your finances with ease!</p>
+<p>Manage your finacnes with ease!</p>
+
+<a href="{% url 'transactions_index' %}">
+	<button>
+		Go to Transactions
+	</button>
+</a>
+
+
+<a href="{% url 'reports_index' %}">
+	<button>
+		Go to Reports
+	</button>
+</a>
+
+{% endblock page_content %}

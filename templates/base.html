@@ -1,0 +1,39 @@
+<!-- base template for html -->
+
+<!DOCTYPE html5>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>{% block title %}Strongpaw Budget{% endblock title %}</title>
+		{% load static %}
+		<link rel="stylesheet" href={% static 'css/style.css' %}>
+	</head>
+
+	<header>
+		<h1>Strongpaw Budget</h1>
+		<nav>
+			<a href="{% url 'mainpage_index' %}" >Home</a>
+			<a href="#contact">Contact</a>
+		</nav>
+	</header>
+
+	<hr>
+
+	<body class="container">
+
+<!-- End top level content --> 
+
+		{% block page_content %}{% endblock page_content %}
+
+	</body>
+
+	<hr>
+
+	<footer>
+		<p>By Strongpaw Coding</p>
+		<p>All Rights Reserverd</p>
+	</footer>
+
+</html>
+
