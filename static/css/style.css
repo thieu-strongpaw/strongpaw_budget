@@ -1,0 +1,38 @@
+/* style sheet for whole project */ 
+
+.no-underline {
+	text-decoration: none;
+}
+
+.button-style {
+	padding: 10px 20px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+header {
+	background-color: #481054;
+	padding: 10px;
+	color: white;
+}
+
+footer {
+	background-color: #481054;
+	padding: 10px;
+	color: white;
+}
+
+nav {
+	background-color: #9F71A8;
+	padding: 10px;
+}
+
+nav a {
+	color: white;
+	margin-right: 15px;
+	text-decoration: none;
+}
+
+nav a:hover {
+	color: lightgray;
+}

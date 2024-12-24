@@ -5,17 +5,13 @@
 <h1>Welcome to the Strongpaw Budget</h1>
 <p>Manage your finacnes with ease!</p>
 
-<a href="{% url 'transactions_index' %}">
-	<button>
-		Go to Transactions
-	</button>
+<a href="{% url 'transactions_index' %}" class="no-underline">
+	<button class="button-style">Go to Transactions</button>
 </a>
 
 
-<a href="{% url 'reports_index' %}">
-	<button>
-		Go to Reports
-	</button>
+<a href="{% url 'reports_index' %}" class="no-underline">
+	<button class="button-style">Go to Reports</button>
 </a>
 
 {% endblock page_content %}

@@ -2,12 +2,12 @@
 
 <!DOCTYPE html5>
 
+{% load static %}
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
 		<title>{% block title %}Strongpaw Budget{% endblock title %}</title>
-		{% load static %}
-		<link rel="stylesheet" href={% static 'css/style.css' %}>
+		<link rel="stylesheet" href="{% static 'css/style.css' %}">
 	</head>
 
 	<header>
