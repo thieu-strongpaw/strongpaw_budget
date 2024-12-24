@@ -2,9 +2,57 @@
 
 {% block page_content %}
 
+<h1>Transactions Page</h1>
+<h3>Add Transactions</h3>
 
+<form method="post">
+	{% csrf_token %}
+	{{ form.as_table }}
+	<button type="submit">Add Transaction</button>
+</form>
 
+<h2>Transactions List</h2>
 
+<table>
+	<thead>
+		<tr>
+			<th>Date</th>
+			<th>Amount</th>
+			<th>Account</th>
+			<th>Category</th>
+			<th>Notes</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for transaction in transactions %}
+		<tr>
+			<td>{{ transaction.transaction_date }}</td>
+			<td>{{ transaction.amount }}</td>
+			<td>{{ transaction.account }}</td>
+			<td>{{ transaction.category }}</td>
+			<td>{{ transaction.notes }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+<!-- Pagination Control -->
+<div class="pagination">
+	<span class="step-links">
+		{% if transactions.has_previous %}
+			<a href="?page=1">First</a>
+			<a href="?page={{ transactions.previous_page_number }}">Previous</a>
+		{% endif %}
+
+		<span>Page {{ transactions.number }} of {{ transactions.paginator.num_pages }}</span>
+
+		{% if transactions.has_next %}
+			<a href="?page={{ transactions.next_page_number }}">Next</a>
+			<a href="?page={{ transactions.paginator.num_pages }}">Last</a>
+		{% endif %}
+	</span>
+</div>
+		
 
 
 {% endblock page_content %}
