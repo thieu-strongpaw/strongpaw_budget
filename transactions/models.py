@@ -17,8 +17,24 @@ class Category(models.Model):
         (INCOME, "Income"),
     ]
 
+    HOUSING = 'Housing'
+    TRANSPORTATION = 'Transportation'
+    FOOD = 'Food'
+    ENTERTAINMENT = 'Entertainment'
+    OTHER = 'Other'
+    INCOME = 'Income'
+    SUPERCATEGORY_CHOICES = [
+        (HOUSING, "Housing"),
+        (TRANSPORTATION, "Transportation"),
+        (FOOD, "Food"),
+        (ENTERTAINMENT, "Entertainment"),
+        (OTHER, "Other"),
+        (INCOME, "Income"),
+    ]
+
     name = models.CharField(max_length=50, unique=True)
     cost_type = models.CharField(max_length=10, choices=COST_CHOICES, default=VARIABLE)
+    supercategory = models.CharField(max_length=20, choices=SUPERCATEGORY_CHOICES, default=OTHER)
 
     def __str__(self):
         return f"{self.name}"
