@@ -5,4 +5,38 @@
 <h1>Reports Page</h1>
 <p>Review reports from your budget</p>
 
+<h3>Monthly Report for {{ month }}/{{ year }}</h3>
+
+<!-- select month to report --> 
+<form method="get">
+	<label for="month">Month</lable>
+	<select id="month" name="month">
+		{% for m in months %}
+			<option value="{{ m }}" {% if m == month %}selected{% endif %}>{{ m }}</option>
+		{% endfor %}
+	</select>
+	<label for="year">Year:</label>
+	<input type="number" id="year" name="year" value="{{ year }}">
+	<button type="submit">View Report</button>
+</form>
+
+<!-- transactions tabel breakdown -->
+<table>
+	<thead>
+		<tr>
+			{% for supercat in supercategories %}
+			<th>{{ supercat }}</th>
+			{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<!-- this is the totals for supercategories --> 
+			{% for name, value in totals_list %}
+				<th>{{ value }}</th>
+			{% endfor %}
+		</tr>
+	</tbody>
+</table>
+
 {% endblock page_content %}
