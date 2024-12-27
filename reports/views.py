@@ -25,7 +25,7 @@ def index(request):
         report_data[supercat].append({'category': category, 'total_spent': total_spent})
         totals[supercat] += total_spent
 
-    totals_list = list(zip(totals.keys(), totals.values()))
+    supercat_totals_list = list(zip(totals.keys(), totals.values()))
 
     # TODO: this does not quite work. I need to shape the data in such a way that 
     # gets rid of the dic and uses list or tuple.
@@ -40,13 +40,28 @@ def index(request):
     supercategories = [choice[0] for choice in Category.SUPERCATEGORY_CHOICES]
     months = range(1, 13)
 
+
+    category_by_supercat_list = []
+    for supercat, report_data[supercat] in report_data_list:
+        print(report_data[supercat])
+        temp_list = []
+        for item in report_data[supercat]:
+            cat, tot = item.values()
+            cat_tot = (cat, tot)
+            temp_list.append(cat_tot)
+        category_by_supercat_list.append(temp_list) 
+    print(category_by_supercat_list)
+
+
+
     context = {
-        'totals_list': totals_list,
+        'supercat_totals_list': supercat_totals_list,
         'report_data_list': report_data_list,
         'year': year,
         'month': month,
         'supercategories': supercategories,
         'months': months,
+        'category_by_supercat_list': category_by_supercat_list,
     }
     
     return render(request, 'reports/reports.html', context)

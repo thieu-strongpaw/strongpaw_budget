@@ -2,6 +2,19 @@
 
 {% block page_content %}
 
+<style>
+table {
+	border: 1px solid black;
+	border-collapse: collapse;
+	width: 100%;
+}
+th, td {
+	border: 1px solid black;
+	padding: 8px; 
+	text-align: left;
+}
+</style>
+
 <h1>Reports Page</h1>
 <p>Review reports from your budget</p>
 
@@ -32,9 +45,21 @@
 	<tbody>
 		<tr>
 			<!-- this is the totals for supercategories --> 
-			{% for name, value in totals_list %}
-				<th>{{ value }}</th>
+			{% for name, value in supercat_totals_list %}
+				<td>{{ value }}</td>
 			{% endfor %}
+		</tr>
+
+	<tr><td></td></tr>
+		
+		<tr> <!-- this whole row will hold the columns for each category in each supercat -->
+		{% for supercat in category_by_supercat_list %}
+			<td>
+			{% for cat in supercat %}	
+				<p>{{ cat.0 }} : {{ cat.1 }}</p>
+			{% endfor %}
+			</td>
+		{% endfor %}
 		</tr>
 	</tbody>
 </table>
