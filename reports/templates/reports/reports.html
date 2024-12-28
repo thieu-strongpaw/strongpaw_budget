@@ -55,9 +55,21 @@ th, td {
 		<tr> <!-- this whole row will hold the columns for each category in each supercat -->
 		{% for supercat in category_by_supercat_list %}
 			<td>
+				<table>
 			{% for cat in supercat %}	
-				<p>{{ cat.0 }} : {{ cat.1 }}</p>
+				<tr>
+				<td>
+				<p>{{ cat.0 }}: {{ cat.1 }}</p>
+				</td>
+				<td>
+				<p>Budget:{{ cat.2 }}</p>
+				</td>
+				<td>
+				<p>Target: {{ cat.3 }}</p>
+				</td>
+				</tr>
 			{% endfor %}
+				</table>
 			</td>
 		{% endfor %}
 		</tr>

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.db.models import Sum
 from transactions.models import Transaction, Category
 from datetime import datetime
+from decimal import Decimal
 
 def index(request):
     year = request.GET.get('year', datetime.now().year)
@@ -12,18 +13,24 @@ def index(request):
         transaction_date__month=month
     ).values(
         'category__supercategory',
-        'category__name'
+        'category__name',
+        'category__budget_amount',
     ).annotate(total_spent=Sum('amount')).order_by('category__supercategory', 'category__name')
 
+    
     report_data = {supercat[0]: [] for supercat in Category.SUPERCATEGORY_CHOICES}
     totals = {supercat[0]: 0 for supercat in Category.SUPERCATEGORY_CHOICES}
 
     for txn in transactions:
         supercat = txn['category__supercategory']
         category = txn['category__name']
-        total_spent = txn['total_spent']
-        report_data[supercat].append({'category': category, 'total_spent': total_spent})
+        total_spent = txn['total_spent'].quantize(Decimal("0.01"))
+        budget_amount = txn['category__budget_amount'].quantize(Decimal("0.01"))
+        budget_over_under = budget_amount - total_spent
+        report_data[supercat].append({'category': category, 'total_spent': total_spent, 'budget_amount': budget_amount,'budget_over_under' : budget_over_under,})
         totals[supercat] += total_spent
+
+
 
     supercat_totals_list = list(zip(totals.keys(), totals.values()))
 
@@ -46,8 +53,8 @@ def index(request):
         print(report_data[supercat])
         temp_list = []
         for item in report_data[supercat]:
-            cat, tot = item.values()
-            cat_tot = (cat, tot)
+            cat, tot, bud, over_und = item.values()
+            cat_tot = (cat, tot, bud, over_und)
             temp_list.append(cat_tot)
         category_by_supercat_list.append(temp_list) 
     print(category_by_supercat_list)
