@@ -27,17 +27,10 @@ def index(request):
         total_spent = txn['total_spent'].quantize(Decimal("0.01"))
         budget_amount = txn['category__budget_amount'].quantize(Decimal("0.01"))
         budget_over_under = budget_amount - total_spent
-        report_data[supercat].append({'category': category, 'total_spent': total_spent, 'budget_amount': budget_amount,'budget_over_under' : budget_over_under,})
+        report_data[supercat].append({'supercat': supercat, 'category': category, 'total_spent': total_spent, 'budget_amount': budget_amount,'budget_over_under' : budget_over_under,})
         totals[supercat] += total_spent
 
-
-
     supercat_totals_list = list(zip(totals.keys(), totals.values()))
-
-    # TODO: this does not quite work. I need to shape the data in such a way that 
-    # gets rid of the dic and uses list or tuple.
-    #total_data_lst = list(zip(report_data.keys(), report_data.values()))
-
 
     report_data_list = [
         (supercat, report_data[supercat]) for supercat in report_data.keys()
@@ -53,8 +46,8 @@ def index(request):
         print(report_data[supercat])
         temp_list = []
         for item in report_data[supercat]:
-            cat, tot, bud, over_und = item.values()
-            cat_tot = (cat, tot, bud, over_und)
+            supcat, cat, tot, bud, over_und = item.values()
+            cat_tot = (supcat, cat, tot, bud, over_und)
             temp_list.append(cat_tot)
         category_by_supercat_list.append(temp_list) 
     print(category_by_supercat_list)
