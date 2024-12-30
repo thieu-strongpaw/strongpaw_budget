@@ -11,20 +11,20 @@
 }
 
 header {
-	background-color: #481054;
+	background-color: #2E0138;
 	padding: 10px;
 	color: white;
 	border-radius: 10px;
 }
 
 footer {
-	background-color: #481054;
+	background-color: #2E0138;
 	padding: 10px;
 	color: white;
 }
 
 nav {
-	background-color: #9F71A8;
+	background-color: #481054;
 	padding: 10px;
 	border-radius: 10px;
 }
@@ -41,4 +41,43 @@ nav a:hover {
 
 body {
 	background-color: #9F71A8;
+}
+
+.tables-container {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	column-gap: 10%;
+	padding: 10px;
+}
+table {
+	border: 1px solid black;
+	border-collapse: separate;
+	border-spacing: 0;
+	width: auto;
+	border-radius: 10px;
+}
+th, td {
+	border: 1px solid black;
+	padding: 8px; 
+	text-align: left;
+	width: 200px;
+}
+
+.cat_by_supercat {
+	
+	background-color: #481054;
+	min-width: 200px;
+	padding: 10px;
+	margin-top: 15px;	
+	color: white;
+	border: none;
+	table-layout: fixed;
+}
+
+.cat_by_supercat_cell {
+	background-color: #9F71A8;
+	color: black;
+	width: 100px;
 }

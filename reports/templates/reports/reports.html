@@ -2,26 +2,6 @@
 
 {% block page_content %}
 
-<style>
-.tables-container {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
-	gap: 10px;
-}
-table {
-	border: 1px solid black;
-	border-collapse: separate;
-	border-spacing: 0;
-	width: auto;
-	border-radius: 10px;
-}
-th, td {
-	border: 1px solid black;
-	padding: 8px; 
-	text-align: left;
-}
-</style>
 
 <h1>Reports Page</h1>
 <p>Review reports from your budget</p>
@@ -55,29 +35,45 @@ th, td {
 			{% for name, value in supercat_totals_list %}
 				<td>{{ value }}</td>
 			{% endfor %}
-		</tr>
+	</tr>
+</table>
 
 		
 <!-- this tables of transactions by category in each supercat -->
 <div class="tables-container">
 			{% for supercat in category_by_supercat_list %}
-				<table>
+				<table class="cat_by_supercat">
 					<thead>
 						<tr>
-							<th style="border: none;">{{ supercat.0.0 }}</th>
+							<th>{{ supercat.0.0 }}</th>
 						</tr>
 					</thead>
 					<body>
 						{% for cat in supercat %}	
 							<tr>
-								<td>
+								<td class="cat_by_supercat_cell">
 									<p>{{ cat.1 }}: {{ cat.2 }}</p>
 								</td>
-								<td>
+								<td class="cat_by_supercat_cell">
 									<p>Budget:{{ cat.3 }}</p>
 								</td>
-								<td>
-									<p>Target: {{ cat.3 }}</p>
+								<td style="{% if cat.4 > 0 %}font-weight: bold;
+																						 color: green;
+																						 text-shadow:
+																						 	-1px -1px 0 black,
+																							 1px  1px 0 black,
+																						 	-1px  1px 0 black,
+																							 1px  1px 0 black;
+													 {% else %}font-weight: bold;
+													 					 color: red;
+																		 text-shadow:
+																						 	-1px -1px 0 black,
+																							 1px  1px 0 black,
+																						 	-1px  1px 0 black,
+																							 1px  1px 0 black;
+													 {% endif %}"
+													 class="cat_by_supercat_cell">
+									<p>Target: {{ cat.4 }}</p>
 								</td>
 							</tr>
 						{% endfor %}

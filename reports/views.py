@@ -52,7 +52,9 @@ def index(request):
         category_by_supercat_list.append(temp_list) 
     print(category_by_supercat_list)
 
-
+    target_positive = "green"
+    target_negitive = "red"
+    target_color = (target_positive, target_negitive)
 
     context = {
         'supercat_totals_list': supercat_totals_list,
@@ -62,6 +64,7 @@ def index(request):
         'supercategories': supercategories,
         'months': months,
         'category_by_supercat_list': category_by_supercat_list,
+        'target_color': target_color,
     }
     
     return render(request, 'reports/reports.html', context)
