@@ -5,6 +5,12 @@
 
 <h1>Reports Page</h1>
 <p>Review reports from your budget</p>
+<div>
+		<nav>
+			<a href="{% url 'reports_monthReport' %}" >Monthly by Categories</a>
+			<a href="#Monthly_income_vs_exspence" >Month Income vs Expenses</a>
+		</nav>
+</div>
 
 <h3>Monthly Report for {{ month }}/{{ year }}</h3>
 
@@ -20,66 +26,5 @@
 	<input type="number" id="year" name="year" value="{{ year }}">
 	<button type="submit">View Report</button>
 </form>
-
-<!-- transactions tabel breakdown -->
-<table>
-	<thead>
-		<tr>
-			{% for supercat in supercategories %}			<th>{{ supercat }}</th>
-			{% endfor %}
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<!-- this is the totals for supercategories --> 
-			{% for name, value in supercat_totals_list %}
-				<td>{{ value }}</td>
-			{% endfor %}
-	</tr>
-</table>
-
-		
-<!-- this tables of transactions by category in each supercat -->
-<div class="tables-container">
-			{% for supercat in category_by_supercat_list %}
-				<table class="cat_by_supercat">
-					<thead>
-						<tr>
-							<th>{{ supercat.0.0 }}</th>
-						</tr>
-					</thead>
-					<body>
-						{% for cat in supercat %}	
-							<tr>
-								<td class="cat_by_supercat_cell">
-									<p>{{ cat.1 }}: {{ cat.2 }}</p>
-								</td>
-								<td class="cat_by_supercat_cell">
-									<p>Budget:{{ cat.3 }}</p>
-								</td>
-								<td style="{% if cat.4 > 0 %}font-weight: bold;
-																						 color: green;
-																						 text-shadow:
-																						 	-1px -1px 0 black,
-																							 1px  1px 0 black,
-																						 	-1px  1px 0 black,
-																							 1px  1px 0 black;
-													 {% else %}font-weight: bold;
-													 					 color: red;
-																		 text-shadow:
-																						 	-1px -1px 0 black,
-																							 1px  1px 0 black,
-																						 	-1px  1px 0 black,
-																							 1px  1px 0 black;
-													 {% endif %}"
-													 class="cat_by_supercat_cell">
-									<p>Target: {{ cat.4 }}</p>
-								</td>
-							</tr>
-						{% endfor %}
-					</body>
-				</table>
-		{% endfor %}
-</div>
 
 {% endblock page_content %}
