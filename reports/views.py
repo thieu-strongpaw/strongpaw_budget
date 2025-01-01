@@ -5,6 +5,7 @@ from datetime import datetime
 from decimal import Decimal
 
 def index(request):
+    
     year = request.GET.get('year', datetime.now().year)
     month = request.GET.get('month', datetime.now().month)
 
@@ -42,13 +43,19 @@ def index(request):
 
 
     category_by_supercat_list = []
+    category_by_supercat_totals = []
     for supercat, report_data[supercat] in report_data_list:
-        temp_list = []
+        temp_list_cat = []
+        temp_list_cat_totals = []
         for item in report_data[supercat]:
             supcat, cat, tot, bud, over_und = item.values()
             cat_tot = (supcat, cat, tot, bud, over_und)
-            temp_list.append(cat_tot)
-        category_by_supercat_list.append(temp_list) 
+            temp_list_cat.append(cat_tot)
+            temp_list_cat_totals.append(bud)
+        category_by_supercat_list.append(temp_list_cat) 
+        cat_total_sum = sum(temp_list_cat_totals)
+        category_by_supercat_totals.append(cat_total_sum)
+
 
     target_positive = "green"
     target_negitive = "red"
@@ -62,10 +69,11 @@ def index(request):
         'supercategories': supercategories,
         'months': months,
         'category_by_supercat_list': category_by_supercat_list,
+        'category_by_supercat_totals': category_by_supercat_totals,
         'target_color': target_color,
     }
     
-    return render(request, 'reports/reports.html', context)
+    return render(request, 'reports/monthReport.html', context)
 
 def monthlyReport(request):
     
@@ -106,13 +114,23 @@ def monthlyReport(request):
 
 
     category_by_supercat_list = []
+    category_by_supercat_totals = []
     for supercat, report_data[supercat] in report_data_list:
-        temp_list = []
+        temp_list_cat = []
+        temp_list_cat_totals = []
         for item in report_data[supercat]:
             supcat, cat, tot, bud, over_und = item.values()
             cat_tot = (supcat, cat, tot, bud, over_und)
-            temp_list.append(cat_tot)
-        category_by_supercat_list.append(temp_list) 
+            temp_list_cat.append(cat_tot)
+            temp_list_cat_totals.append(tot)
+        category_by_supercat_list.append(temp_list_cat) 
+        cat_total_sum = sum(temp_list_cat_totals)
+        category_by_supercat_totals.append(cat_total_sum)
+
+    for i in category_by_supercat_list:
+        print(i[0][0])
+    for i in category_by_supercat_totals:
+        print(i)
 
     target_positive = "green"
     target_negitive = "red"
@@ -126,6 +144,7 @@ def monthlyReport(request):
         'supercategories': supercategories,
         'months': months,
         'category_by_supercat_list': category_by_supercat_list,
+        'category_by_supercat_totals': category_by_supercat_totals,
         'target_color': target_color,
     }
     

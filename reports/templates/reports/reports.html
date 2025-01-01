@@ -27,4 +27,26 @@
 	<button type="submit">View Report</button>
 </form>
 
+<table>
+	<thead>
+		<tr>
+			{% for supercat in supercategories %}			
+				<th>{{ supercat }}</th>
+			{% endfor %}
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<!-- this is the totals for supercategories --> 
+				{% for name, value in supercat_totals_list %}
+					<td>{{ value }}</td>
+				{% endfor %}
+	</tr>
+		<tr>
+			<!-- this is the totals for supercategories --> 
+			{% for cat_value in category_by_supercat_totals %}
+					<td>{{ cat_value }}</td>
+				{% endfor %}
+	</tr>
+</table>
 {% endblock page_content %}

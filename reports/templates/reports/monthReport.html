@@ -27,7 +27,14 @@
 	<button type="submit">View Report</button>
 </form>
 
-<!-- transactions tabel breakdown -->
+<!-- supercategory tabel breakdown -->
+<!-- 
+	TODO: need to rearrange these lists. the table should be in the format:
+	============================
+	||			||SuperCategory || SuperCategory ||...
+	||Budget|| numner				|| number
+	||actual|| numner				|| number
+	-->
 <table>
 	<thead>
 		<tr>
@@ -41,6 +48,12 @@
 			{% for name, value in supercat_totals_list %}
 				<td>{{ value }}</td>
 			{% endfor %}
+	</tr>
+		<tr>
+			<!-- this is the totals for supercategories --> 
+			{% for cat_value in category_by_supercat_totals %}
+					<td>{{ cat_value }}</td>
+				{% endfor %}
 	</tr>
 </table>
 
