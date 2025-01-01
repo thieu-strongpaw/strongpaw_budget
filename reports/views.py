@@ -1,152 +1,103 @@
 from django.shortcuts import render
-from django.db.models import Sum
+from django.db.models import Sum, F
 from transactions.models import Transaction, Category
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import Decimal
 
 def index(request):
     
+    months_of_year = range(1, 13)
+
     year = request.GET.get('year', datetime.now().year)
     month = request.GET.get('month', datetime.now().month)
 
-    transactions = Transaction.objects.filter(
-        transaction_date__year=year,
-        transaction_date__month=month
-    ).values(
-        'category__supercategory',
-        'category__name',
-        'category__budget_amount',
-    ).annotate(total_spent=Sum('amount')).order_by('category__supercategory', 'category__name')
+    table_1_data_queryset = Category.objects.filter(
+        transaction__transaction_date__year=year,
+        transaction__transaction_date__month=month,
+        ).values(
+                'supercategory',
+        ).annotate(
+                total_budget=Sum('budget_amount'),
+                total_spent=Sum('transaction__amount'),
+        )
 
+    table_2_data_queryset = Category.objects.filter(
+        transaction__transaction_date__year=year,
+        transaction__transaction_date__month=month,
+        ).values(
+                'supercategory',
+                'name',
+                'budget_amount',
+        ).annotate(
+                total_spent=Sum('transaction__amount'),
+                difference=F('budget_amount') - Sum('transaction__amount')
+        )
+
+
+    table_1_data_list = [(item['supercategory'], 
+                          item['total_budget'].quantize(Decimal("0.01")) or 0, 
+                          item['total_spent'].quantize(Decimal("0.01")) or 0, 
+                          (item['total_budget'] - item['total_spent']).quantize(Decimal("0.01"))) 
+                            for item in table_1_data_queryset]
+
+    supercategory_data = {}
+    for item in table_2_data_queryset:
+        supercategory = item['supercategory']
+        category_data = (
+                item['name'],
+                item['budget_amount'].quantize(Decimal("0.01")),
+                item['total_spent'].quantize(Decimal("0.01")),
+                item['difference'].quantize(Decimal("0.01")),
+                )
+        if supercategory not in supercategory_data:
+            supercategory_data[supercategory] = []
+        supercategory_data[supercategory].append(category_data)
+
+    table_2_data_list = [(supercat, tuple(categories)) for supercat, categories in supercategory_data.items()]
+    print(table_2_data_list)
     
-    report_data = {supercat[0]: [] for supercat in Category.SUPERCATEGORY_CHOICES}
-    totals = {supercat[0]: 0 for supercat in Category.SUPERCATEGORY_CHOICES}
+    sorted(table_1_data_list, key=lambda item: item[0])
 
-    for txn in transactions:
-        supercat = txn['category__supercategory']
-        category = txn['category__name']
-        total_spent = txn['total_spent'].quantize(Decimal("0.01"))
-        budget_amount = txn['category__budget_amount'].quantize(Decimal("0.01"))
-        budget_over_under = budget_amount - total_spent
-        report_data[supercat].append({'supercat': supercat, 'category': category, 'total_spent': total_spent, 'budget_amount': budget_amount,'budget_over_under' : budget_over_under,})
-        totals[supercat] += total_spent
-
-    supercat_totals_list = list(zip(totals.keys(), totals.values()))
-
-    report_data_list = [
-        (supercat, report_data[supercat]) for supercat in report_data.keys()
-    ]
-
-    # Predefined ranges for templates
-    supercategories = [choice[0] for choice in Category.SUPERCATEGORY_CHOICES]
-    months = range(1, 13)
-
-
-    category_by_supercat_list = []
-    category_by_supercat_totals = []
-    for supercat, report_data[supercat] in report_data_list:
-        temp_list_cat = []
-        temp_list_cat_totals = []
-        for item in report_data[supercat]:
-            supcat, cat, tot, bud, over_und = item.values()
-            cat_tot = (supcat, cat, tot, bud, over_und)
-            temp_list_cat.append(cat_tot)
-            temp_list_cat_totals.append(bud)
-        category_by_supercat_list.append(temp_list_cat) 
-        cat_total_sum = sum(temp_list_cat_totals)
-        category_by_supercat_totals.append(cat_total_sum)
-
-
-    target_positive = "green"
-    target_negitive = "red"
-    target_color = (target_positive, target_negitive)
+    supercat_name_list = [(item[0]) for item in table_1_data_list]
 
     context = {
-        'supercat_totals_list': supercat_totals_list,
-        'report_data_list': report_data_list,
-        'year': year,
+        'table_1_data_list': table_1_data_list,
+        'table_2_data_list': table_2_data_list,
+        'supercat_name_list': supercat_name_list,
+        'months_of_year': months_of_year,
         'month': month,
-        'supercategories': supercategories,
-        'months': months,
-        'category_by_supercat_list': category_by_supercat_list,
-        'category_by_supercat_totals': category_by_supercat_totals,
-        'target_color': target_color,
+        'year': year,
     }
     
-    return render(request, 'reports/monthReport.html', context)
+    return render(request, 'reports/reports.html', context)
 
-def monthlyReport(request):
+def incomeVsExpence(request):
+
+    today = datetime.today()
+    default_start_date = datetime(today.year, 1, 1).date()
+    first_of_next_month = datetime(today.year, today.month + 1, 1) if today.month < 12 else datetime(today.year + 1, 1, 1)
+    default_end_date = (first_of_next_month - timedelta(days=1)).date()
     
-    year = request.GET.get('year', datetime.now().year)
-    month = request.GET.get('month', datetime.now().month)
-
-    transactions = Transaction.objects.filter(
-        transaction_date__year=year,
-        transaction_date__month=month
-    ).values(
-        'category__supercategory',
-        'category__name',
-        'category__budget_amount',
-    ).annotate(total_spent=Sum('amount')).order_by('category__supercategory', 'category__name')
-
-    
-    report_data = {supercat[0]: [] for supercat in Category.SUPERCATEGORY_CHOICES}
-    totals = {supercat[0]: 0 for supercat in Category.SUPERCATEGORY_CHOICES}
-
-    for txn in transactions:
-        supercat = txn['category__supercategory']
-        category = txn['category__name']
-        total_spent = txn['total_spent'].quantize(Decimal("0.01"))
-        budget_amount = txn['category__budget_amount'].quantize(Decimal("0.01"))
-        budget_over_under = budget_amount - total_spent
-        report_data[supercat].append({'supercat': supercat, 'category': category, 'total_spent': total_spent, 'budget_amount': budget_amount,'budget_over_under' : budget_over_under,})
-        totals[supercat] += total_spent
-
-    supercat_totals_list = list(zip(totals.keys(), totals.values()))
-
-    report_data_list = [
-        (supercat, report_data[supercat]) for supercat in report_data.keys()
-    ]
-
-    # Predefined ranges for templates
-    supercategories = [choice[0] for choice in Category.SUPERCATEGORY_CHOICES]
-    months = range(1, 13)
+    start_date = request.GET.get('start_date', str(default_start_date))
+    end_date = request.GET.get('end_date', str(default_end_date))
+    months_of_year = range(1,13)
 
 
-    category_by_supercat_list = []
-    category_by_supercat_totals = []
-    for supercat, report_data[supercat] in report_data_list:
-        temp_list_cat = []
-        temp_list_cat_totals = []
-        for item in report_data[supercat]:
-            supcat, cat, tot, bud, over_und = item.values()
-            cat_tot = (supcat, cat, tot, bud, over_und)
-            temp_list_cat.append(cat_tot)
-            temp_list_cat_totals.append(tot)
-        category_by_supercat_list.append(temp_list_cat) 
-        cat_total_sum = sum(temp_list_cat_totals)
-        category_by_supercat_totals.append(cat_total_sum)
+#   transactions = Transaction.objects.filter(
+#       transaction_date__year=year,
+#       transaction_date__month=month
+#   ).values(
+#       'category__supercategory',
+#       'category__name',
+#       'category__budget_amount',
+#   ).annotate(total_spent=Sum('amount')).order_by('category__supercategory', 'category__name')
 
-    for i in category_by_supercat_list:
-        print(i[0][0])
-    for i in category_by_supercat_totals:
-        print(i)
-
-    target_positive = "green"
-    target_negitive = "red"
-    target_color = (target_positive, target_negitive)
 
     context = {
-        'supercat_totals_list': supercat_totals_list,
-        'report_data_list': report_data_list,
-        'year': year,
-        'month': month,
-        'supercategories': supercategories,
-        'months': months,
-        'category_by_supercat_list': category_by_supercat_list,
-        'category_by_supercat_totals': category_by_supercat_totals,
-        'target_color': target_color,
+        'start_date': start_date,
+        'end_date': end_date,
+        'months_of_year': months_of_year,
     }
     
-    return render(request, 'reports/monthReport.html', context)
+    return render(request, 'reports/incomeVsExpence.html', context)
 

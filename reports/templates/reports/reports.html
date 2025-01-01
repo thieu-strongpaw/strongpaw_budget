@@ -5,48 +5,101 @@
 
 <h1>Reports Page</h1>
 <p>Review reports from your budget</p>
+
 <div>
 		<nav>
-			<a href="{% url 'reports_monthReport' %}" >Monthly by Categories</a>
-			<a href="#Monthly_income_vs_exspence" >Month Income vs Expenses</a>
+			<a href="{% url 'reports_index' %}" >Monthly by Categories</a>
+			<a href="{% url 'reports_incomeVsExpence' %}" >Month Income vs Expenses</a>
 		</nav>
 </div>
 
 <h3>Monthly Report for {{ month }}/{{ year }}</h3>
 
 <!-- select month to report --> 
-<form method="get">
-	<label for="month">Month</lable>
-	<select id="month" name="month">
-		{% for m in months %}
-			<option value="{{ m }}" {% if m == month %}selected{% endif %}>{{ m }}</option>
-		{% endfor %}
-	</select>
-	<label for="year">Year:</label>
-	<input type="number" id="year" name="year" value="{{ year }}">
-	<button type="submit">View Report</button>
-</form>
-
-<table>
-	<thead>
-		<tr>
-			{% for supercat in supercategories %}			
-				<th>{{ supercat }}</th>
+<div>
+	<form method="get">
+		<label for="month">Month</lable>
+		<select id="month" name="month">
+			{% for m in months_of_year %}
+				<option value="{{ m }}" {% if m == months_of_year %}selected{% endif %}>{{ m }}</option>
 			{% endfor %}
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<!-- this is the totals for supercategories --> 
-				{% for name, value in supercat_totals_list %}
-					<td>{{ value }}</td>
+		</select>
+		<label for="year">Year:</label>
+		<input type="number" id="year" name="year" value="{{ year }}">
+		<button type="submit">View Report</button>
+	</form>
+</div>
+
+<div class="table_1">
+	<table>
+		<thead>
+			<tr>
+				{% for name in supercat_name_list %}
+				<th>{{ name }}</th>
 				{% endfor %}
-	</tr>
-		<tr>
-			<!-- this is the totals for supercategories --> 
-			{% for cat_value in category_by_supercat_totals %}
-					<td>{{ cat_value }}</td>
+			</tr>
+		</thead>
+
+		<tbody>
+			<tr>
+				{% for supercat_name, total_budget, total_spent, diff in table_1_data_list %}
+				<td>{{ total_budget }}</td>
 				{% endfor %}
-	</tr>
-</table>
+				<td>Projected</td>
+			</tr>
+			<tr>
+				{% for supercat_name, total_budget, total_spent, diff in table_1_data_list %}
+				<td>{{ total_spent }}</td>
+				{% endfor %}
+				<td>Actual</td>
+			</tr>
+			<tr>
+				{% for supercat_name, total_budget, total_spent, diff in table_1_data_list %}
+				<td style="{% if diff > 0 %}font-weight: bold;
+									 									color: green;
+										{% else %}font-weight: bold;
+															color: maroon;
+										{% endif %}">
+					{{ diff }}
+				</td>
+				{% endfor %}
+				<td>Difference</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="table_2">
+	{% for supercat in table_2_data_list%}
+	<h4>{{ supercat.0 }}</h4>
+	{% for data in supercat.1 %}
+	<table>
+		<thead>
+			<tr>
+				<th>Category</th>
+				<th>Projected</th>
+				<th>Actual</th>
+				<th>Difference</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{{ data.0 }}</td>
+				<td>{{ data.1 }}</td>
+				<td>{{ data.2 }}</td>
+				<td style="{% if diff > 0 %}font-weight: bold;
+									 									color: green;
+										{% else %}font-weight: bold;
+															color: maroon;
+										{% endif %}">
+				{{ data.3 }}
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	{% endfor %}
+	{% endfor %}
+	
+
+
 {% endblock page_content %}

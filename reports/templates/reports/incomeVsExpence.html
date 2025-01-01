@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+
+
+<h1>Reports Page</h1>
+<p>Review reports from your budget</p>
+
+<div>
+		<nav>
+			<a href="{% url 'reports_index' %}" >Monthly by Categories</a>
+			<a href="{% url 'reports_incomeVsExpence' %}" >Month Income vs Expenses</a>
+		</nav>
+</div>
+
+
+<h3>Income Vs Expences by Month</h3>
+<p>From {{ start_date }} To {{ end_date }}</p>
+
+
+<form method="get">
+	<label for="start-date">Start Date:</lable>
+		<input type="date" id="start-date" name="start_date" value="{{ start_date }}">
+
+	<label for="end-date">End Date:</lable>
+		<input type="date" id="end-date" name="end_date" value="{{ end_date }}">
+
+	<button type="submit">View Report</button>
+</form>
+
+
+{% endblock page_content %}
