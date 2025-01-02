@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.db.models import Sum, F
+from django.db.models.functions import TruncMonth
 from transactions.models import Transaction, Category
 from datetime import datetime, timedelta
 from decimal import Decimal
+from calendar import month_name
 
 def index(request):
     
@@ -82,16 +84,33 @@ def incomeVsExpence(request):
     end_date = request.GET.get('end_date', str(default_end_date))
     months_of_year = range(1,13)
 
+    queryset_income_vs_expence = Transaction.objects.filter(
+            transaction_date__range=(start_date, end_date)
+            ).annotate(
+                    month=TruncMonth('transaction_date')
+            ).values(
+                    'month'
+            ).annotate(
+                    income=Sum('amount', filter=F('category__cost_type') == 'Income'),
+                    var_cost=Sum('amount', filter=F('categroy__cost_type') == 'Fixed'),
+                    fix_cost=Sum('amount', filter=F('category__cost_type') == 'Variable'),
+            ).order_by('month')
 
-#   transactions = Transaction.objects.filter(
-#       transaction_date__year=year,
-#       transaction_date__month=month
-#   ).values(
-#       'category__supercategory',
-#       'category__name',
-#       'category__budget_amount',
-#   ).annotate(total_spent=Sum('amount')).order_by('category__supercategory', 'category__name')
 
+    table_1_data = []
+    for item in queryset_income_vs_expence:
+        month = item['month']
+        print(f'month: {month}')
+        income = item['income']
+        print(f'incom: {income}')
+        var_cost = item['var_cost']
+        fix_cost = item['fix_cost']
+        cost = var_cost + fix_cost
+        dif = income - cost
+        table_1_data.append((month, income, cost, dif))
+
+    for i in table_1_data: print(i)
+            
 
     context = {
         'start_date': start_date,

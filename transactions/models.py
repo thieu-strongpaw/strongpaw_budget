@@ -11,10 +11,12 @@ class Category(models.Model):
     FIXED = 'Fixed'
     VARIABLE = "Variable"
     INCOME = 'Income'
+    SAVINGS = 'Savings'
     COST_CHOICES = [
         (FIXED, "Fixed Cost"),
         (VARIABLE, "Variable"),
         (INCOME, "Income"),
+        (SAVINGS, "SAVINGS"),
     ]
 
     HOUSING = 'Housing'
