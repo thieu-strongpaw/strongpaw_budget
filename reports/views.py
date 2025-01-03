@@ -35,6 +35,8 @@ def index(request):
                 difference=F('budget_amount') - Sum('transaction__amount')
         )
 
+    for i in table_1_data_queryset:
+        print(i)
 
     table_1_data_list = [(item['supercategory'], 
                           item['total_budget'].quantize(Decimal("0.01")) or 0, 
@@ -56,7 +58,6 @@ def index(request):
         supercategory_data[supercategory].append(category_data)
 
     table_2_data_list = [(supercat, tuple(categories)) for supercat, categories in supercategory_data.items()]
-    print(table_2_data_list)
     
     sorted(table_1_data_list, key=lambda item: item[0])
 
@@ -96,26 +97,26 @@ def incomeVsExpence(request):
                     fix_cost=Sum('amount', filter=F('category__cost_type') == 'Variable'),
             ).order_by('month')
 
+    #print(queryset_income_vs_expence[0]['month'].strftime("%B"))
+
+    category_names = Category.objects.values_list('name', flat=True)
+    print(category_names)
 
     table_1_data = []
     for item in queryset_income_vs_expence:
-        month = item['month']
-        print(f'month: {month}')
+        month = item['month'].strftime("%B")
         income = item['income']
-        print(f'incom: {income}')
         var_cost = item['var_cost']
         fix_cost = item['fix_cost']
         cost = var_cost + fix_cost
         dif = income - cost
         table_1_data.append((month, income, cost, dif))
 
-    for i in table_1_data: print(i)
-            
-
     context = {
         'start_date': start_date,
         'end_date': end_date,
         'months_of_year': months_of_year,
+        'table_1_data': table_1_data,
     }
     
     return render(request, 'reports/incomeVsExpence.html', context)

@@ -28,5 +28,28 @@
 	<button type="submit">View Report</button>
 </form>
 
+<p>Stuff</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Month</th>
+			<th>Income</th>
+			<th>Expenses</th>
+			<th>Difference</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for month in table_1_data %}
+		<tr>
+			<td>{{ month.0 }}</td>
+			<td>{{ month.1 }}</td>
+			<td>{{ month.2 }}</td>
+			<td>{{ month.3 }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+		
 
 {% endblock page_content %}

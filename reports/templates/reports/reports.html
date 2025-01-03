@@ -55,7 +55,7 @@
 			</tr>
 			<tr>
 				{% for supercat_name, total_budget, total_spent, diff in table_1_data_list %}
-				<td style="{% if diff > 0 %}font-weight: bold;
+				<td style="{% if diff >= 0 %}font-weight: bold;
 									 									color: green;
 										{% else %}font-weight: bold;
 															color: maroon;
@@ -72,7 +72,6 @@
 <div class="table_2">
 	{% for supercat in table_2_data_list%}
 	<h4>{{ supercat.0 }}</h4>
-	{% for data in supercat.1 %}
 	<table>
 		<thead>
 			<tr>
@@ -83,11 +82,12 @@
 			</tr>
 		</thead>
 		<tbody>
+	{% for data in supercat.1 %}
 			<tr>
 				<td>{{ data.0 }}</td>
 				<td>{{ data.1 }}</td>
 				<td>{{ data.2 }}</td>
-				<td style="{% if diff > 0 %}font-weight: bold;
+				<td style="{% if diff > -1 %}font-weight: bold;
 									 									color: green;
 										{% else %}font-weight: bold;
 															color: maroon;
@@ -95,9 +95,9 @@
 				{{ data.3 }}
 				</td>
 			</tr>
+	{% endfor %}
 		</tbody>
 	</table>
-	{% endfor %}
 	{% endfor %}
 	
 
