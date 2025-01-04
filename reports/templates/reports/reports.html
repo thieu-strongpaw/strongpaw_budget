@@ -2,7 +2,6 @@
 
 {% block page_content %}
 
-
 <h1>Reports Page</h1>
 <p>Review reports from your budget</p>
 
@@ -31,42 +30,45 @@
 </div>
 
 <div class="table_1">
-	<table>
-		<thead>
-			<tr>
-				{% for name in supercat_name_list %}
-				<th>{{ name }}</th>
-				{% endfor %}
-			</tr>
-		</thead>
 
-		<tbody>
-			<tr>
-				{% for supercat_name, total_budget, total_spent, diff in table_1_data_list %}
-				<td>{{ total_budget }}</td>
-				{% endfor %}
-				<td>Projected</td>
-			</tr>
-			<tr>
-				{% for supercat_name, total_budget, total_spent, diff in table_1_data_list %}
-				<td>{{ total_spent }}</td>
-				{% endfor %}
-				<td>Actual</td>
-			</tr>
-			<tr>
-				{% for supercat_name, total_budget, total_spent, diff in table_1_data_list %}
-				<td style="{% if diff >= 0 %}font-weight: bold;
-									 									color: green;
-										{% else %}font-weight: bold;
-															color: maroon;
-										{% endif %}">
-					{{ diff }}
-				</td>
-				{% endfor %}
-				<td>Difference</td>
-			</tr>
-		</tbody>
-	</table>
+<table>
+	<thead>
+		<tr>
+			{% for supercat in table_1_data_list_v2%}
+			<th>{{ supercat.supercategory }}</th>
+			{% endfor %}
+		</tr>
+	</thead>
+<tbody>
+	<tr>
+		{% for item in table_1_data_list %}
+		<td>{{ item.0 }}</td>
+		{% endfor %}
+		<td>Projected</td>
+	</tr>
+	<tr>
+		{% for item in table_1_data_list %}
+		<td>{{ item.1 }}</td>
+		{% endfor %}
+		<td>Actual</td>
+	</tr>
+	<tr>
+		{% for item in table_1_data_list %}
+		<td style="{% if item.2 >= 0 %}font-weight: bold;
+																color: green;
+								{% else %}font-weight: bold;
+													color: maroon;
+								{% endif %}">
+			{{ item.2 }}
+		</td>
+		{% endfor %}
+		<td>Difference</td>
+	</tr>
+</tbody>
+</table>
+</div>
+</table>
+
 </div>
 
 <div class="table_2">
