@@ -53,6 +53,12 @@ def index(request):
                 difference=F('budget_amount') - Sum('transaction__amount')
         )
 
+
+
+
+    cat_names = Category.objects.values()
+    print(cat_names)
+
     supercategory_data = {}
     for item in table_2_data_queryset:
         supercategory = item['supercategory']
@@ -66,9 +72,38 @@ def index(request):
             supercategory_data[supercategory] = []
         supercategory_data[supercategory].append(category_data)
 
-    table_2_data_list = [(supercat, tuple(categories)) for supercat, categories in supercategory_data.items()]
-    
+        
 
+    for name in supercat_names:
+        if name not in supercategory_data.keys():
+            supercategory_data[name] = []
+
+    print('supercategory_data')
+    print(supercategory_data)
+    print(type(supercategory_data))
+    print(supercategory_data.keys())
+    print(supercategory_data.values())
+    print()
+    print(supercategory_data['Food'])
+    
+    for cat in cat_names:
+        if cat['name'] not in supercategory_data[cat['supercategory']]:
+            supercategory_data[cat['supercategory']].append((cat['name'], cat['budget_amount'], 0, 0))
+            
+
+    '''
+    test_val = False
+    for i in supercategory_data['Food']:
+        if 'Eating Out' in i: test_val = True
+    print(test_val)
+    '''
+
+
+#   for supercat in supercategory_data:
+#       if cat_names['name'] not in supercategory_data[cat_names['supercategory']]:
+
+
+    table_2_data_list = [(supercat, tuple(categories)) for supercat, categories in supercategory_data.items()]
 
     context = {
         'table_1_data_queryset': table_1_data_queryset,
