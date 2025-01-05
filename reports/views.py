@@ -23,12 +23,16 @@ def index(request):
                 total_budget=Sum('budget_amount'),
                 total_spent=Sum('transaction__amount'),
         )
+    print(table_1_data_queryset)
 
     table_1_data_list = [(item['supercategory'], 
                           item['total_budget'].quantize(Decimal("0.01")) or 0, 
                           item['total_spent'].quantize(Decimal("0.01")) or 0, 
                           (item['total_budget'] - item['total_spent']).quantize(Decimal("0.01"))) 
                             for item in table_1_data_queryset]
+    print(table_1_data_list)
+    print()
+    
     
     supercat_in_list = []
     for item in table_1_data_list:
@@ -38,6 +42,7 @@ def index(request):
         if item not in supercat_in_list:
             table_1_data_list.append((item, 0, 0, 0))
 
+    print(table_1_data_list)
 
 
 
@@ -57,7 +62,6 @@ def index(request):
 
 
     cat_names = Category.objects.values()
-    print(cat_names)
 
     supercategory_data = {}
     for item in table_2_data_queryset:
@@ -77,32 +81,11 @@ def index(request):
     for name in supercat_names:
         if name not in supercategory_data.keys():
             supercategory_data[name] = []
-
-    print('supercategory_data')
-    print(supercategory_data)
-    print(type(supercategory_data))
-    print(supercategory_data.keys())
-    print(supercategory_data.values())
-    print()
-    print(supercategory_data['Food'])
     
     for cat in cat_names:
         if cat['name'] not in supercategory_data[cat['supercategory']]:
             supercategory_data[cat['supercategory']].append((cat['name'], cat['budget_amount'], 0, 0))
             
-
-    '''
-    test_val = False
-    for i in supercategory_data['Food']:
-        if 'Eating Out' in i: test_val = True
-    print(test_val)
-    '''
-
-
-#   for supercat in supercategory_data:
-#       if cat_names['name'] not in supercategory_data[cat_names['supercategory']]:
-
-
     table_2_data_list = [(supercat, tuple(categories)) for supercat, categories in supercategory_data.items()]
 
     context = {
@@ -140,10 +123,24 @@ def incomeVsExpence(request):
                     fix_cost=Sum('amount', filter=F('category__cost_type') == 'Variable'),
             ).order_by('month')
 
-    #print(queryset_income_vs_expence[0]['month'].strftime("%B"))
 
     category_names = Category.objects.values_list('name', flat=True)
-    print(category_names)
+
+    for i in queryset_income_vs_expence:
+        print(i)
+
+    income_query = Transaction.objects.filter(category__cost_type='Income')
+    fix_cost = Transaction.objects.filter(category__cost_type='Fixed')
+    var_cost = Transaction.objects.filter(category__cost_type='Variable')
+
+
+    def sum_cost(cost):
+        cost_total = 0
+        for i in cost:
+            cost_total += i.amount
+    
+    fix_cost_total = sum_cost(fix_cost)
+    var_cost_total = sum_cost(var_cost)
 
     table_1_data = []
     for item in queryset_income_vs_expence:
