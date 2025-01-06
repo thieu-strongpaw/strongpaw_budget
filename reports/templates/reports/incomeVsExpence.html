@@ -40,12 +40,12 @@
 		</tr>
 	</thead>
 	<tbody>
-		{% for month in table_1_data %}
+		{% for month in income_query %}
 		<tr>
-			<td>{{ month.0 }}</td>
-			<td>{{ month.1 }}</td>
-			<td>{{ month.2 }}</td>
-			<td>{{ month.3 }}</td>
+			<td>{{ month.month }}</td>
+			<td>{{ month.income }}</td>
+			<td>{{ month.cost }}</td>
+			<td>{{ month.difference }}</td>
 		</tr>
 		{% endfor %}
 	</tbody>

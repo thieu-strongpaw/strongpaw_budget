@@ -1,9 +1,11 @@
 from django.shortcuts import render
-from django.db.models import Sum, F 
-from django.db.models.functions import TruncMonth
+from django.db.models import Sum, F, Q, Value, DecimalField
+from django.db.models.functions import TruncMonth, Coalesce
 from transactions.models import Transaction, Category
 from datetime import datetime, timedelta
 from decimal import Decimal
+from django.db import models
+
 
 def index(request):
     
@@ -111,52 +113,26 @@ def incomeVsExpence(request):
     end_date = request.GET.get('end_date', str(default_end_date))
     months_of_year = range(1,13)
 
-    queryset_income_vs_expence = Transaction.objects.filter(
-            transaction_date__range=(start_date, end_date)
-            ).annotate(
-                    month=TruncMonth('transaction_date')
-            ).values(
-                    'month'
-            ).annotate(
-                    income=Sum('amount', filter=F('category__cost_type') == 'Income'),
-                    var_cost=Sum('amount', filter=F('categroy__cost_type') == 'Fixed'),
-                    fix_cost=Sum('amount', filter=F('category__cost_type') == 'Variable'),
-            ).order_by('month')
-
-
-    category_names = Category.objects.values_list('name', flat=True)
-
-    for i in queryset_income_vs_expence:
-        print(i)
-
-    income_query = Transaction.objects.filter(category__cost_type='Income')
-    fix_cost = Transaction.objects.filter(category__cost_type='Fixed')
-    var_cost = Transaction.objects.filter(category__cost_type='Variable')
-
-
-    def sum_cost(cost):
-        cost_total = 0
-        for i in cost:
-            cost_total += i.amount
-    
-    fix_cost_total = sum_cost(fix_cost)
-    var_cost_total = sum_cost(var_cost)
-
-    table_1_data = []
-    for item in queryset_income_vs_expence:
-        month = item['month'].strftime("%B")
-        income = item['income']
-        var_cost = item['var_cost']
-        fix_cost = item['fix_cost']
-        cost = var_cost + fix_cost
-        dif = income - cost
-        table_1_data.append((month, income, cost, dif))
+    income_query = Transaction.objects.filter(
+        transaction_date__range=(start_date, end_date)
+    ).annotate(
+        month=TruncMonth('transaction_date')  # Group transactions by month
+    ).values(
+        'month'
+    ).annotate(
+        income=Coalesce(Sum('amount', filter=Q(category__cost_type='Income')), Value(0, output_field=DecimalField())),
+        cost=Coalesce(
+            Sum('amount', filter=Q(category__cost_type__in=['Fixed Cost', 'Variable'])),
+            Value(0, output_field=DecimalField())
+        ),
+        difference=F('income') - F('cost')  # Income minus the combined cost
+    ).order_by('month')
 
     context = {
+        'income_query': income_query,
         'start_date': start_date,
         'end_date': end_date,
         'months_of_year': months_of_year,
-        'table_1_data': table_1_data,
     }
     
     return render(request, 'reports/incomeVsExpence.html', context)
