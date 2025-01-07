@@ -10,13 +10,17 @@
 		<link rel="stylesheet" href="{% static 'css/style.css' %}">
 	</head>
 
-	<header>
+	<div class="header">	
 		<h1>Strongpaw Budget</h1>
-		<nav>
-			<a href="{% url 'mainpage_index' %}" >Home</a>
-			<a href="#contact">Contact</a>
-		</nav>
-	</header>
+	</div>
+
+	<div class="sidebar">
+		<a href="{% url 'mainpage_index' %}">Home</a>
+		<a href="{% url 'transactions_index' %}">Transactions</a>
+		<a href="{% url 'reports_index' %}">Reports</a>
+
+	</div>
+
 
 	<hr>
 
