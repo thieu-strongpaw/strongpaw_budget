@@ -10,19 +10,6 @@
 	cursor: pointer;
 }
 
-header {
-	background-color: #2E0138;
-	padding: 10px;
-	color: white;
-	border-radius: 10px;
-}
-
-footer {
-	background-color: #2E0138;
-	padding: 10px;
-	color: white;
-}
-
 nav {
 	background-color: #481054;
 	padding: 10px;
@@ -101,15 +88,24 @@ th, td {
 }
 
 .container {
-	margin-left: 130px;
-	padding: 0px 10px;
+	margin-left: 140px;
+	padding: 10px 10px;
 }
 
 .header {
 	color: white; 
 	background-color: #2E0138; 
-	align: left; 
+	align: center; 
 	max-width: 340px;
 	border-radius: 10px;
 	text-align: center;
 }
+
+.foot {
+	background-color: #2E0138;
+	align: center;
+	max-width: 340;
+	padding: 10px;
+	color: white;
+}
+

@@ -2,16 +2,9 @@
 
 {% block page_content %}
 
-<h1>Welcome to the Strongpaw Budget</h1>
+<h1 style="padding: 10px;">Welcome</h1>
+<p style="margin-left: 100px;">to the</p>
+<h1 style="padding: 10px;">Strongpaw Budget</h1>
 <p>Manage your finances with ease!</p>
-
-<a href="{% url 'transactions_index' %}" class="no-underline">
-	<button class="button-style">Go to Transactions</button>
-</a>
-
-
-<a href="{% url 'reports_index' %}" class="no-underline">
-	<button class="button-style">Go to Reports</button>
-</a>
 
 {% endblock page_content %}
