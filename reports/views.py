@@ -25,16 +25,12 @@ def index(request):
                 total_budget=Sum('budget_amount'),
                 total_spent=Sum('transaction__amount'),
         )
-    print(table_1_data_queryset)
 
     table_1_data_list = [(item['supercategory'], 
                           item['total_budget'].quantize(Decimal("0.01")) or 0, 
                           item['total_spent'].quantize(Decimal("0.01")) or 0, 
                           (item['total_budget'] - item['total_spent']).quantize(Decimal("0.01"))) 
                             for item in table_1_data_queryset]
-    print(table_1_data_list)
-    print()
-    
     
     supercat_in_list = []
     for item in table_1_data_list:
@@ -90,6 +86,8 @@ def index(request):
             
     table_2_data_list = [(supercat, tuple(categories)) for supercat, categories in supercategory_data.items()]
 
+    print(table_2_data_list)
+
     context = {
         'table_1_data_queryset': table_1_data_queryset,
         'table_1_data_list': table_1_data_list,
@@ -127,6 +125,8 @@ def incomeVsExpence(request):
         ),
         difference=F('income') - F('cost')  # Income minus the combined cost
     ).order_by('month')
+    
+
 
     context = {
         'income_query': income_query,

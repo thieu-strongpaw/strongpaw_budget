@@ -43,9 +43,9 @@
 		{% for month in income_query %}
 		<tr>
 			<td>{{ month.month }}</td>
-			<td>{{ month.income }}</td>
-			<td>{{ month.cost }}</td>
-			<td>{{ month.difference }}</td>
+			<td>{{ month.income|floatformat:2 }}</td>
+			<td>{{ month.cost|floatformat:2 }}</td>
+			<td>{{ month.difference|floatformat:2 }}</td>
 		</tr>
 		{% endfor %}
 	</tbody>
