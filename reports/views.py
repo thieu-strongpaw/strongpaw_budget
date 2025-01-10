@@ -40,7 +40,6 @@ def index(request):
         if item not in supercat_in_list:
             table_1_data_list.append((item, 0, 0, 0))
 
-    print(table_1_data_list)
 
 
 
@@ -56,7 +55,17 @@ def index(request):
                 difference=F('budget_amount') - Sum('transaction__amount')
         )
 
+    table_3_data_queryset = Category.objects.filter(
+        transaction__transaction_date__year=year,
+        transaction__transaction_date__month=month,
+        ).values_list(
+                'supercategory',
+                ).distinct().annotate(
+                        total_spent=Sum('transaction__amount'))
 
+    for i in table_3_data_queryset:
+        print(i)
+        print()
 
 
     cat_names = Category.objects.values()
@@ -86,7 +95,11 @@ def index(request):
             
     table_2_data_list = [(supercat, tuple(categories)) for supercat, categories in supercategory_data.items()]
 
-    print(table_2_data_list)
+#   for i in table_2_data_list:
+#       print(i)
+#       print()
+#       for y in i:
+#           print(y)
 
     context = {
         'table_1_data_queryset': table_1_data_queryset,
