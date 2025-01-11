@@ -16,6 +16,9 @@ def index(request):
 
     supercat_names = [choice[0] for choice in Category.SUPERCATEGORY_CHOICES] 
 
+# Logic for table_1
+
+    # TODO this table is summing the budget amounts up wrong. 
     table_1_data_queryset = Category.objects.filter(
         transaction__transaction_date__year=year,
         transaction__transaction_date__month=month,
@@ -25,6 +28,7 @@ def index(request):
                 total_budget=Sum('budget_amount'),
                 total_spent=Sum('transaction__amount'),
         )
+
 
     table_1_data_list = [(item['supercategory'], 
                           item['total_budget'].quantize(Decimal("0.01")) or 0, 
@@ -41,74 +45,34 @@ def index(request):
             table_1_data_list.append((item, 0, 0, 0))
 
 
-
-
+# Logic for table_2
     table_2_data_queryset = Category.objects.filter(
         transaction__transaction_date__year=year,
         transaction__transaction_date__month=month,
-        ).values(
-                'supercategory',
+        ).values_list(
                 'name',
-                'budget_amount',
-        ).annotate(
+                'budget_amount'
+        ).distinct().annotate(
                 total_spent=Sum('transaction__amount'),
-                difference=F('budget_amount') - Sum('transaction__amount')
+                difference=F('budget_amount') - Sum('transaction__amount'),
         )
 
-    table_3_data_queryset = Category.objects.filter(
-        transaction__transaction_date__year=year,
-        transaction__transaction_date__month=month,
-        ).values_list(
-                'supercategory',
-                ).distinct().annotate(
-                        total_spent=Sum('transaction__amount'))
-
-    for i in table_3_data_queryset:
-        print(i)
-        print()
-
+    table_2_data = { name: {'budget':budget, 'actual':actual, 'diff':diff} for (name, budget, actual, diff) in table_2_data_queryset}
+    
 
     cat_names = Category.objects.values()
-
-    supercategory_data = {}
-    for item in table_2_data_queryset:
-        supercategory = item['supercategory']
-        category_data = (
-                item['name'],
-                item['budget_amount'].quantize(Decimal("0.01")),
-                item['total_spent'].quantize(Decimal("0.01")),
-                item['difference'].quantize(Decimal("0.01")),
-                )
-        if supercategory not in supercategory_data:
-            supercategory_data[supercategory] = []
-        supercategory_data[supercategory].append(category_data)
-
-        
-
-    for name in supercat_names:
-        if name not in supercategory_data.keys():
-            supercategory_data[name] = []
     
-    for cat in cat_names:
-        if cat['name'] not in supercategory_data[cat['supercategory']]:
-            supercategory_data[cat['supercategory']].append((cat['name'], cat['budget_amount'], 0, 0))
-            
-    table_2_data_list = [(supercat, tuple(categories)) for supercat, categories in supercategory_data.items()]
-
-#   for i in table_2_data_list:
-#       print(i)
-#       print()
-#       for y in i:
-#           print(y)
+    for item in cat_names:
+        if item['name'] not in table_2_data.keys():
+            table_2_data[item['name']] = {'budget': item['budget_amount'], 'actual':0, 'diff':item['budget_amount']}
+    
 
     context = {
-        'table_1_data_queryset': table_1_data_queryset,
+        'table_2_data': table_2_data,
         'table_1_data_list': table_1_data_list,
-        'table_2_data_list': table_2_data_list,
         'months_of_year': months_of_year,
         'month': month,
         'year': year,
-        'supercat_names': supercat_names,
     }
     
     return render(request, 'reports/reports.html', context)

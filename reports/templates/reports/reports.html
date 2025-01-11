@@ -72,8 +72,7 @@
 </div>
 
 <div class="table_2">
-	{% for supercat in table_2_data_list%}
-	<h4>{{ supercat.0 }}</h4>
+	<h4>Food</h4>
 	<table>
 		<thead>
 			<tr>
@@ -84,24 +83,272 @@
 			</tr>
 		</thead>
 		<tbody>
-	{% for data in supercat.1 %}
 			<tr>
-				<td>{{ data.0 }}</td>
-				<td>{{ data.1 }}</td>
-				<td>{{ data.2 }}</td>
-				<td style="{% if diff > -1 %}font-weight: bold;
-									 									color: green;
-										{% else %}font-weight: bold;
-															color: maroon;
-										{% endif %}">
-				{{ data.3 }}
-				</td>
+				<td>Eating Out</td>
+				<td>{{ table_2_data.EatingOut.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.EatingOut.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.EatingOut.diff|floatformat:2 }}</td>
 			</tr>
-	{% endfor %}
+			<tr>
+				<td>Grocery</td>
+				<td>{{ table_2_data.Grocery.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Grocery.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Grocery.diff|floatformat:2 }}</td>
+			</tr>
 		</tbody>
 	</table>
-	{% endfor %}
-	
+</div>
 
+<div class="table_2">
+	<h4>Transportation</h4>
+	<table>
+		<thead>
+			<tr>
+				<th>Category</th>
+				<th>Projected</th>
+				<th>Actual</th>
+				<th>Difference</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Gas</td>
+				<td>{{ table_2_data.Gas.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Gas.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Gas.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Tollway</td>
+				<td>{{ table_2_data.Tollway.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Tollway.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Tollway.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Registration</td>
+				<td>{{ table_2_data.Registration.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Registration.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Registration.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Maintenance</td>
+				<td>{{ table_2_data.Maintenance.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Maintenance.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Maintenance.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Insureance</td>
+				<td>{{ table_2_data.Insureance.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Insureance.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Insureance.diff|floatformat:2 }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="table_2">
+	<h4>Other</h4>
+	<table>
+		<thead>
+			<tr>
+				<th>Category</th>
+				<th>Projected</th>
+				<th>Actual</th>
+				<th>Difference</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Home</td>
+				<td>{{ table_2_data.Home.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Home.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Home.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Savings</td>
+				<td>{{ table_2_data.Savings.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Savings.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Savings.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Pet</td>
+				<td>{{ table_2_data.Pet.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Pet.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Pet.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Best Buy</td>
+				<td>{{ table_2_data.BestBuy.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.BestBuy.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.BestBuy.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Personal</td>
+				<td>{{ table_2_data.Personal.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Personal.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Personal.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Work Expenses</td>
+				<td>{{ table_2_data.Work.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Work.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Work.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Fees</td>
+				<td>{{ table_2_data.Fees.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Fees.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Fees.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Medical</td>
+				<td>{{ table_2_data.Medical.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Medical.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Medical.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Vacation</td>
+				<td>{{ table_2_data.Vacation.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Vacation.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Vacation.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Gifts</td>
+				<td>{{ table_2_data.Gifts.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Gifts.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Gifts.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Starbucks</td>
+				<td>{{ table_2_data.Starbucks.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Starbucks.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Starbucks.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>School</td>
+				<td>{{ table_2_data.School.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.School.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.School.diff|floatformat:2 }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="table_2">
+	<h4>Housing</h4>
+	<table>
+		<thead>
+			<tr>
+				<th>Category</th>
+				<th>Projected</th>
+				<th>Actual</th>
+				<th>Difference</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Mortgage</td>
+				<td>{{ table_2_data.Mortgage.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Mortgage.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Mortgage.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Gardening</td>
+				<td>{{ table_2_data.Gardening.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Gardening.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Gardening.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Sewer</td>
+				<td>{{ table_2_data.Sewer.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Sewer.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Sewer.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Nicor</td>
+				<td>{{ table_2_data.Nicor.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Nicor.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Nicor.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>T-Mobile</td>
+				<td>{{ table_2_data.TMobile.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.TMobile.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.TMobile.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Comed</td>
+				<td>{{ table_2_data.Comed.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Comed.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Comed.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Trash</td>
+				<td>{{ table_2_data.Trash.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Trash.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Trash.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Water</td>
+				<td>{{ table_2_data.Water.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Water.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Water.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Comcast</td>
+				<td>{{ table_2_data.Comcast.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Comcast.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Comcast.diff|floatformat:2 }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="table_2">
+	<h4>Entertainment</h4>
+	<table>
+		<thead>
+			<tr>
+				<th>Category</th>
+				<th>Projected</th>
+				<th>Actual</th>
+				<th>Difference</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>Netflix</td>
+				<td>{{ table_2_data.Netflix.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Netflix.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Netflix.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>HBM Max</td>
+				<td>{{ table_2_data.HBOMax.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.HBOMax.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.HBOMax.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Gaming</td>
+				<td>{{ table_2_data.Gaming.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Gaming.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Gaming.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Spotify</td>
+				<td>{{ table_2_data.Spotify.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Spotify.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Spotify.diff|floatformat:2 }}</td>
+			</tr>
+			<tr>
+				<td>Activities</td>
+				<td>{{ table_2_data.Activities.budget|floatformat:2 }}</td>
+				<td>{{ table_2_data.Activities.actual|floatformat:2 }}</td>
+				<td>{{ table_2_data.Activities.diff|floatformat:2 }}</td>
+			</tr>
+
+
+		</tbody>
+	</table>
+</div>
 
 {% endblock page_content %}
