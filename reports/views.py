@@ -25,14 +25,14 @@ def index(request):
         ).values(
                 'supercategory',
         ).annotate(
-                total_budget=Sum('budget_amount'),
+                total_budget=Sum('budget_amount', distinct=True),
                 total_spent=Sum('transaction__amount'),
         )
 
 
     table_1_data_list = [(item['supercategory'], 
-                          item['total_budget'].quantize(Decimal("0.01")) or 0, 
-                          item['total_spent'].quantize(Decimal("0.01")) or 0, 
+                          item['total_budget'], 
+                          item['total_spent'],
                           (item['total_budget'] - item['total_spent']).quantize(Decimal("0.01"))) 
                             for item in table_1_data_queryset]
     
@@ -43,6 +43,7 @@ def index(request):
     for item in supercat_names:
         if item not in supercat_in_list:
             table_1_data_list.append((item, 0, 0, 0))
+
 
 
 # Logic for table_2

@@ -42,24 +42,24 @@
 <tbody>
 	<tr>
 		{% for item in table_1_data_list %}
-		<td>{{ item.1 }}</td>
+		<td>{{ item.1|floatformat:2 }}</td>
 		{% endfor %}
 		<td>Projected</td>
 	</tr>
 	<tr>
 		{% for item in table_1_data_list %}
-		<td>{{ item.2 }}</td>
+		<td>{{ item.2|floatformat:2 }}</td>
 		{% endfor %}
 		<td>Actual</td>
 	</tr>
 	<tr>
 		{% for item in table_1_data_list %}
-		<td style="{% if item.3 >= 0 %}font-weight: bold;
+		<td style="{% if item.3|floatformat:2 >= 0 %}font-weight: bold;
 																color: green;
 								{% else %}font-weight: bold;
 													color: maroon;
 								{% endif %}">
-			{{ item.2 }}
+			{{ item.2|floatformat:2 }}
 		</td>
 		{% endfor %}
 		<td>Difference</td>
